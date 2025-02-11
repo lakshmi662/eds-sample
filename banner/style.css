@@ -1,0 +1,10 @@
+.eds-banner {
+    background-color: blue;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  .eds-banner img {
+    max-width:100%;
+    height: auto;
+  }
