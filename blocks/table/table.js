@@ -1,53 +1,52 @@
 export default async function decorate(block) {
     try {
-      const response = await fetch("https://assignment-2--eds-sample--lakshmi662.aem.live/states.json");
-      
+      // Fetch data from the given URL
+      const response = await fetch("http://localhost:3000/states.json");
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      
-      const data = await response.json();
-      console.log(data);  // Log the fetched data
   
-      // Create the table
+      const jsonData = await response.json();
+      const data = jsonData.data;
+      const columns = jsonData.columns; // Headers from the JSON
+  
+      console.log("Fetched Data:", data); // Debugging log
+  
+      // Create a table
       const table = document.createElement("table");
-      table.classList.add("state-table");
+      table.classList.add("data-table");
   
-      // Create and append the table header
+      // Create the table header
       const thead = document.createElement("thead");
       const headerRow = document.createElement("tr");
   
-      const th1 = document.createElement("th");
-      th1.textContent = "State";
-      const th2 = document.createElement("th");
-      th2.textContent = "Capital";
+      columns.forEach(column => {
+        const th = document.createElement("th");
+        th.textContent = column.charAt(0).toUpperCase() + column.slice(1); // Capitalize header
+        headerRow.appendChild(th);
+      });
   
-      headerRow.appendChild(th1);
-      headerRow.appendChild(th2);
       thead.appendChild(headerRow);
       table.appendChild(thead);
   
-      // Create and append the table body
+      // Create and populate the table body
       const tbody = document.createElement("tbody");
-      data.forEach(state => {
+      data.forEach(item => {
         const row = document.createElement("tr");
-  
-        const tdState = document.createElement("td");
-        tdState.textContent = state.name;
-  
-        const tdCapital = document.createElement("td");
-        tdCapital.textContent = state.capital;
-  
-        row.appendChild(tdState);
-        row.appendChild(tdCapital);
+        columns.forEach(column => {
+          const td = document.createElement("td");
+          td.textContent = item[column] || ""; // Populate cell with data or empty if missing
+          row.appendChild(td);
+        });
         tbody.appendChild(row);
       });
   
       table.appendChild(tbody);
-      block.appendChild(table);  // Append the table to the custom block
+      block.appendChild(table); // Append the table to the custom block
     } catch (error) {
       console.error("Error fetching data:", error);
-      block.textContent = "Failed to load state data.";
+      block.textContent = "Failed to load data.";
     }
   }
   
