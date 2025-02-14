@@ -20,7 +20,7 @@
 .form-group textarea {
   flex: 1;
   padding: 0.5rem;
-  border: 1px solid black;  /* Black border */
+  border: 1px solid black; 
   border-radius: 4px;
 }
 
